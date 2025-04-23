@@ -32,14 +32,15 @@ class LoginActivity : AppCompatActivity() {
                     if (user != null) {
                         runOnUiThread {
                             Toast.makeText(this@LoginActivity, "Login Berhasil!", Toast.LENGTH_SHORT).show()
-                            // Pindah ke HomeActivity
                             // Kirim data lengkap ke HomeActivity
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            intent.putExtra("ID", user.id)
                             intent.putExtra("NAMA", user.nama)
                             intent.putExtra("EMAIL", user.email)
                             intent.putExtra("NOHP", user.noHp)
                             intent.putExtra("ALAMAT", user.alamat)
                             startActivity(intent)
+
                             finish() // biar pas balik ga bisa ke login lagi
                         }
                     } else {
