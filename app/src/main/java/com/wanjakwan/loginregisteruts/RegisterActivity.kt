@@ -1,5 +1,6 @@
 package com.wanjakwan.loginregisteruts
 
+import android.util.Log
 import android.os.Bundle
 import android.widget.Toast
 import android.content.Intent
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var db: AppDatabase  // database instance
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,6 @@ class RegisterActivity : AppCompatActivity() {
             if (nama.isEmpty() || email.isEmpty() || password.isEmpty() || noHp.isEmpty() || alamat.isEmpty()) {
                 Toast.makeText(this, "Semua field harus diisi", Toast.LENGTH_SHORT).show()
             } else {
-                // Insert ke database pakai coroutine
                 lifecycleScope.launch {
                     val user = User(
                         nama = nama,
@@ -42,13 +42,21 @@ class RegisterActivity : AppCompatActivity() {
                         alamat = alamat
                     )
                     db.userDao().insertUser(user)
+
+                    // Cek isi database lewat Logcat
+                    val allUsers = db.userDao().getAllUsers()
+                    for (u in allUsers) {
+                        Log.d("RoomDB_Check", "User: ${u.nama}, ${u.email}, ${u.noHp}, ${u.alamat}")
+                    }
+
                     runOnUiThread {
                         Toast.makeText(this@RegisterActivity, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                         startActivity(intent)
-                        finish() // kembali ke login atau activity sebelumnya
+                        finish()
                     }
                 }
+
             }
         }
     }

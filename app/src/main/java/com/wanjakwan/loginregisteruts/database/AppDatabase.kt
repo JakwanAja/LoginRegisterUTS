@@ -1,6 +1,7 @@
 package com.wanjakwan.loginregisteruts.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -21,8 +22,13 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "myapp_database"
+                    "myapp_database.db"
                 ).build()
+
+                // Log path database ke Logcat
+                val dbFile = context.getDatabasePath("myapp_database.db")
+                Log.d("DB_PATH", "Database stored at: ${dbFile.absolutePath}")
+
                 INSTANCE = instance
                 instance
             }

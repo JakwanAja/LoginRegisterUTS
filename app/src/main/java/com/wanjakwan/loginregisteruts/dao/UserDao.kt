@@ -10,6 +10,9 @@ import com.wanjakwan.loginregisteruts.model.User
 @Dao
 interface UserDao {
 
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>
+
     @Insert
     suspend fun insertUser(user: User)
 
